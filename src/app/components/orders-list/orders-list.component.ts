@@ -60,7 +60,6 @@ export class OrdersListComponent {
   readonly filters = computed(() => this.service.filters());
   readonly orders = computed(() => this.service.orders());
 
-  // Material Table columns
   readonly displayedColumns = [
     'id',
     'client',

@@ -18,16 +18,6 @@ import {
   NonNullableFormBuilder,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-// import {
-//   MatFormFieldModule,
-//   MatInputModule,
-//   MatSelectModule,
-//   MatButtonModule,
-//   MatCardModule,
-//   MatProgressSpinnerModule,
-//   MatIconModule,
-//   MatDividerModule,
-// } from '@angular/material';
 import { TranslatePipe } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -74,7 +64,6 @@ export class OrderDetailsComponent {
 
   readonly orderForm = signal<FormGroup | null>(null);
 
-  // total is derived reactively from the form
   readonly total = computed(() => {
     const form = this.orderForm();
     if (!form) return 0;
@@ -120,7 +109,6 @@ export class OrderDetailsComponent {
       createdAt: [order.createdAt],
     });
 
-    // subscribe safely to changes
     form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
 
     this.orderForm.set(form);
@@ -148,7 +136,6 @@ export class OrderDetailsComponent {
   }
 
   onProductChange(selectedProduct: any, index: number): void {
-    // use microtask to avoid ExpressionChangedAfterItHasBeenCheckedError
     queueMicrotask(() => {
       const group = this.productsFormArray.at(index) as FormGroup;
       group.patchValue({

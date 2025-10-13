@@ -1,23 +1,21 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { Observable, Subject, merge, of, defer, switchMap, tap, catchError, map } from 'rxjs';
+import { Observable, Subject, merge, of } from 'rxjs';
+import { switchMap, tap, catchError, map } from 'rxjs/operators';
 import { connect } from 'ngxtension/connect';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Order, OrderState, Product } from '../interfaces/order';
-
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
-  private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:3001'; // json-server endpoint
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = 'http://localhost:3001';
 
-  // --- Reactive sources ---
-  refreshOrders$ = new Subject<void>();
-  refreshProducts$ = new Subject<void>();
-  saveOrder$ = new Subject<Order>();
-  deleteOrder$ = new Subject<number>();
+  private readonly refreshOrders$ = new Subject<void>();
+  private readonly refreshProducts$ = new Subject<void>();
+  private readonly saveOrder$ = new Subject<Order>();
+  private readonly deleteOrder$ = new Subject<number>();
 
-  // --- Initial state ---
-  private state = signal<OrderState>({
+  private readonly state = signal<OrderState>({
     orders: [],
     products: [],
     selectedOrder: null,
@@ -26,25 +24,27 @@ export class ProductService {
     filters: { page: 1, pageSize: 10 },
   });
 
-  // --- Selectors ---
-  orders = computed(() => this.state().orders);
-  products = computed(() => this.state().products);
-  selectedOrder = computed(() => this.state().selectedOrder);
-  loading = computed(() => this.state().loading);
-  filters = computed(() => this.state().filters);
-  error = computed(() => this.state().error);
+  readonly orders = computed(() => this.state().orders);
+  readonly products = computed(() => this.state().products);
+  readonly selectedOrder = computed(() => this.state().selectedOrder);
+  readonly loading = computed(() => this.state().loading);
+  readonly error = computed(() => this.state().error);
+  readonly filters = computed(() => this.state().filters);
 
   constructor() {
-    const nextState$ = merge(
+    const stateUpdates$ = merge(
       this.refreshOrders$.pipe(
+        tap(() => this.setLoading(true)),
         switchMap(() => this.loadOrders()),
         map((orders) => ({ orders, loading: false, error: null })),
-        catchError((err) => of({ error: err.message, loading: false }))
+        catchError((err) =>
+          of({ error: err.message, loading: false } as Partial<OrderState>)
+        )
       ),
       this.refreshProducts$.pipe(
         switchMap(() => this.loadProducts()),
         map((products) => ({ products, error: null })),
-        catchError((err) => of({ error: err.message }))
+        catchError((err) => of({ error: err.message } as Partial<OrderState>))
       ),
       this.saveOrder$.pipe(
         switchMap((order) => this.saveOrder(order)),
@@ -53,7 +53,7 @@ export class ProductService {
           selectedOrder: saved,
           error: null,
         })),
-        catchError((err) => of({ error: err.message }))
+        catchError((err) => of({ error: err.message } as Partial<OrderState>))
       ),
       this.deleteOrder$.pipe(
         switchMap((id) => this.deleteOrder(id)),
@@ -62,86 +62,90 @@ export class ProductService {
           selectedOrder: null,
           error: null,
         })),
-        catchError((err) => of({ error: err.message }))
+        catchError((err) => of({ error: err.message } as Partial<OrderState>))
       )
     );
 
-    connect(this.state).with(nextState$);
+    connect(this.state).with(stateUpdates$);
 
-    // Load initial data
     this.refreshProducts$.next();
     this.refreshOrders$.next();
   }
 
-  // --- API methods ---
   private loadProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.baseUrl}/products`);
   }
 
   private loadOrders(): Observable<Order[]> {
     const { page, pageSize, client, status, sort } = this.state().filters;
-    const params = new URLSearchParams();
-    params.set('_page', page.toString());
-    params.set('_limit', pageSize.toString());
-    if (client) params.set('client_like', client);
-    if (status) params.set('status', status);
-    if (sort === 'date') params.set('_sort', 'createdAt');
-    if (sort === 'total') params.set('_sort', 'total');
-    params.set('_order', 'desc');
-    return this.http.get<Order[]>(`${this.baseUrl}/orders?${params.toString()}`);
+
+    let params = new HttpParams()
+      .set('_page', page.toString())
+      .set('_limit', pageSize.toString())
+      .set('_order', 'desc');
+
+    if (client) params = params.set('client_like', client);
+    if (status) params = params.set('status', status);
+    if (sort === 'date') params = params.set('_sort', 'createdAt');
+    if (sort === 'total') params = params.set('_sort', 'total');
+
+    return this.http.get<Order[]>(`${this.baseUrl}/orders`, { params });
   }
 
   private saveOrder(order: Order): Observable<Order> {
-    // Optimistic update
     const existing = this.state().orders.find((o) => o.id === order.id);
+
     if (existing) {
       this.state.update((s) => ({
         ...s,
         orders: s.orders.map((o) => (o.id === order.id ? order : o)),
       }));
-      return this.http.put<Order>(`${this.baseUrl}/orders/${order.id}`, order).pipe(
-        catchError((err) => {
-          // rollback
-          this.state.update((s) => ({
-            ...s,
-            orders: s.orders.map((o) => (o.id === order.id ? existing : o)),
-          }));
-          throw err;
-        })
-      );
+
+      return this.http
+        .put<Order>(`${this.baseUrl}/orders/${order.id}`, order)
+        .pipe(
+          catchError((err) => {
+            this.state.update((s) => ({
+              ...s,
+              orders: s.orders.map((o) => (o.id === order.id ? existing : o)),
+            }));
+            throw err;
+          })
+        );
     } else {
-      // new order
       return this.http.post<Order>(`${this.baseUrl}/orders`, order);
     }
   }
 
   private deleteOrder(id: number): Observable<number> {
-    // Optimistic removal
-    const oldOrders = this.state().orders;
+    const previousOrders = this.state().orders;
+
     this.state.update((s) => ({
       ...s,
       orders: s.orders.filter((o) => o.id !== id),
     }));
+
     return this.http.delete(`${this.baseUrl}/orders/${id}`).pipe(
       map(() => id),
       catchError((err) => {
-        // rollback
-        this.state.update((s) => ({ ...s, orders: oldOrders }));
+        this.state.update((s) => ({ ...s, orders: previousOrders }));
         throw err;
       })
     );
   }
 
-  // --- Helper for replacing updated order ---
   private replaceOrder(orders: Order[], updated: Order): Order[] {
     const index = orders.findIndex((o) => o.id === updated.id);
     if (index === -1) return [...orders, updated];
-    const newOrders = [...orders];
-    newOrders[index] = updated;
-    return newOrders;
+    const next = [...orders];
+    next[index] = updated;
+    return next;
   }
 
-  // --- UI interaction helpers ---
+  private setLoading(isLoading: boolean) {
+    this.state.update((s) => ({ ...s, loading: isLoading }));
+  }
+
   setFilter(partial: Partial<OrderState['filters']>) {
     this.state.update((s) => ({
       ...s,
