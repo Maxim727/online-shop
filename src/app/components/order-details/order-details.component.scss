@@ -1,0 +1,42 @@
+.field {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.product-field,
+.qty-field,
+.price-field {
+  flex: 1;
+}
+
+.total {
+  margin-top: 1.5rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+
+mat-progress-spinner {
+  display: block;
+  margin: 3rem auto;
+}

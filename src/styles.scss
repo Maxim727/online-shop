@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+  background-color: #353535;
+  color: white;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+mat-card {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 2rem auto;
+}
+
+mat-progress-spinner {
+  display: block;
+  margin: 2rem auto;
+}

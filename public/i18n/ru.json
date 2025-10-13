@@ -1,0 +1,78 @@
+{
+  "auth": {
+    "login": "Логин",
+    "password": "Пароль",
+    "loginButton": "Войти",
+    "registerLink": "Создать аккаунт",
+    "noAccount": "Если у вас нет аккаунта",
+    "loading": "Загрузка...",
+    "logout": "Выйти",
+    "welcome": "С возвращением!",
+    "registerTitle": "Регистрация нового пользователя",
+    "username": "Имя пользователя",
+    "email": "Электронная почта",
+    "confirmPassword": "Подтвердите пароль",
+    "submit": "Отправить"
+  },
+  "order": {
+    "title": "Заказы",
+    "client": "Клиент",
+    "clientRequired": "Необходимо указать клиента",
+    "orderNumber": "Номер заказа",
+    "product": "Товар",
+    "quantity": "Количество",
+    "price": "Цена",
+    "total": "Итого:",
+    "details": "Детали заказа",
+    "status": "Статус",
+    "statusValues": {
+      "all": "Все",
+      "new": "Новый",
+      "paid": "Оплачен",
+      "shipped": "Отправлен",
+      "cancelled": "Отменён"
+    },
+    "sort": "Сортировка",
+    "sortValues": {
+      "date": "По дате",
+      "total": "По сумме"
+    },
+    "filters": {
+      "clientPlaceholder": "Поиск по клиенту",
+      "status": "Статус",
+      "sort": "Сортировка"
+    },
+    "actions": {
+      "view": "Просмотр",
+      "delete": "Удалить",
+      "remove": "Удалить",
+      "basic": "Основной",
+      "addItem": "Добавить товар",
+      "save": "Сохранить",
+      "cancel": "Отмена"
+    },
+    "table": {
+      "id": "#",
+      "client": "Клиент",
+      "status": "Статус",
+      "total": "Итого",
+      "date": "Дата",
+      "actions": "Действия"
+    },
+    "editTitle": "Редактировать заказ",
+    "items": "Товары",
+    "loading": "Загрузка заказов...",
+    "loadingDetails": "Загрузка данных заказа..."
+  },
+  "common": {
+    "title": "Интернет-магазин",
+    "yes": "Да",
+    "no": "Нет",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "back": "Назад",
+    "next": "Далее",
+    "loading": "Загрузка...",
+    "requiredField": "Это обязательное поле"
+  }
+}

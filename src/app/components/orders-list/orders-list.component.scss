@@ -1,0 +1,30 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filter-item {
+  flex: 1 1 200px;
+}
+
+.table-container {
+  overflow: auto;
+}
+
+.new {
+  color: dodgerblue;
+}
+
+.paid {
+  color: green;
+}
+
+.shipped {
+  color: purple;
+}
+
+.cancelled {
+  color: red;
+}

@@ -1,0 +1,97 @@
+@if (selectedOrder(); as order) {
+<mat-card>
+  <h2>{{ 'order.editTitle' | translate:{ id: orderForm()?.get('id')?.value } }}</h2>
+
+  <form [formGroup]="orderForm()!">
+    <!-- Customer Name -->
+    <mat-form-field appearance="fill" class="field">
+      <mat-label>{{ 'order.client' | translate }}</mat-label>
+      <input matInput formControlName="customerName" />
+      <mat-error *ngIf="orderForm()?.get('customerName')?.hasError('required')">
+        {{ 'order.clientRequired' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Status Select -->
+    <mat-form-field appearance="fill" class="field">
+      <mat-label>{{ 'order.status' | translate }}</mat-label>
+      <mat-select formControlName="status">
+        @for (s of statuses; track s) {
+        <mat-option [value]="s.value">
+          {{ ('order.statusValues.' + s.value) | translate }}
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Items -->
+    <h3>{{ 'order.items' | translate }}</h3>
+
+    <div formArrayName="products" class="item-list">
+      @for (itemGroup of productsFormArray.controls; track itemGroup; let i = $index) {
+      <div [formGroupName]="i" class="item-row">
+        <!-- Product Item Select -->
+        <mat-form-field appearance="fill" class="product-field">
+          <mat-label>{{ 'order.product' | translate }}</mat-label>
+          <mat-select formControlName="productItem" (selectionChange)="onProductChange($event.value, i)">
+            @for (product of products(); track product) {
+            <mat-option [value]="product.title">
+              {{ product.title }}
+            </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Quantity -->
+        <mat-form-field appearance="fill" class="qty-field">
+          <mat-label>{{ 'order.quantity' | translate }}</mat-label>
+          <input matInput type="number" formControlName="qty" />
+        </mat-form-field>
+
+        <!-- Price -->
+        <mat-form-field appearance="fill" class="price-field">
+          <mat-label>{{ 'order.price' | translate }}</mat-label>
+          <input matInput type="number" formControlName="price" />
+        </mat-form-field>
+
+        <!-- Remove Button -->
+        <button mat-stroked-button color="warn" type="button" (click)="removeItem(i)">
+          {{ 'order.actions.remove' | translate }}
+        </button>
+
+        <!-- Placeholder Action -->
+        <button mat-stroked-button color="primary" type="button">
+          {{ 'order.actions.basic' | translate }}
+        </button>
+      </div>
+      }
+    </div>
+
+    <!-- Add Item -->
+    <button mat-stroked-button color="primary" type="button" (click)="addItem()">
+      {{ 'order.actions.addItem' | translate }}
+    </button>
+
+    <!-- Total -->
+    <h3 class="total">
+      {{ 'order.total' | translate }} {{ total() | currency }}
+    </h3>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="button" (click)="save()">
+        {{ 'order.actions.save' | translate }}
+      </button>
+      <button mat-raised-button color="warn" type="button" (click)="delete()">
+        {{ 'order.actions.delete' | translate }}
+      </button>
+      <button mat-button type="button" (click)="cancel()">
+        {{ 'order.actions.cancel' | translate }}
+      </button>
+    </div>
+  </form>
+</mat-card>
+} @else {
+<mat-progress-spinner mode="indeterminate" diameter="60">
+</mat-progress-spinner>
+}

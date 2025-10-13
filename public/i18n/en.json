@@ -1,0 +1,78 @@
+{
+  "auth": {
+    "login": "Login",
+    "password": "Password",
+    "loginButton": "Sign In",
+    "registerLink": "Create account",
+    "noAccount": "If you don't have an account",
+    "loading": "Loading...",
+    "logout": "Logout",
+    "welcome": "Welcome back!",
+    "registerTitle": "Register a new account",
+    "username": "Username",
+    "email": "Email",
+    "confirmPassword": "Confirm Password",
+    "submit": "Submit"
+  },
+  "order": {
+    "title": "Orders",
+    "client": "Client",
+    "clientRequired": "Client is required",
+    "orderNumber": "Order Number",
+    "product": "Product",
+    "quantity": "Quantity",
+    "price": "Price",
+    "total": "Total:",
+    "details": "Order Details",
+    "status": "Status",
+    "statusValues": {
+      "all": "All",
+      "new": "New",
+      "paid": "Paid",
+      "shipped": "Shipped",
+      "cancelled": "Cancelled"
+    },
+    "sort": "Sort",
+    "sortValues": {
+      "date": "By Date",
+      "total": "By Total"
+    },
+    "filters": {
+      "clientPlaceholder": "Search by client",
+      "status": "Status",
+      "sort": "Sort"
+    },
+    "actions": {
+      "view": "View",
+      "delete": "Delete",
+      "remove": "Remove",
+      "basic": "Basic",
+      "addItem": "Add Item",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "table": {
+      "id": "#",
+      "client": "Client",
+      "status": "Status",
+      "total": "Total",
+      "date": "Date",
+      "actions": "Actions"
+    },
+    "editTitle": "Edit Order",
+    "items": "Items",
+    "loading": "Loading orders...",
+    "loadingDetails": "Loading order details..."
+  },
+  "common": {
+    "title": "Online Shop",
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel",
+    "save": "Save",
+    "back": "Back",
+    "next": "Next",
+    "loading": "Loading...",
+    "requiredField": "This field is required"
+  }
+}
