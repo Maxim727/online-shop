@@ -24,6 +24,7 @@
     "price": "Цена",
     "total": "Итого:",
     "details": "Детали заказа",
+    "required": "Это обязательное поле",
     "status": "Статус",
     "statusValues": {
       "all": "Все",

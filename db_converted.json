@@ -41,10 +41,9 @@
       "updatedAt": "2025-10-08T17:00:00Z"
     }
   ],
-
   "orders": [
     {
-      "id": "100",
+      "id": 100,
       "customerName": "Иван Петров",
       "status": "new",
       "updatedAt": "2025-10-10T09:00:00Z",
@@ -79,7 +78,7 @@
       "total": 1500
     },
     {
-      "id": "101",
+      "id": 101,
       "customerName": "Анна Ковалёва",
       "status": "paid",
       "updatedAt": "2025-10-10T15:30:00Z",
@@ -114,7 +113,7 @@
       "total": 1200
     },
     {
-      "id": "102",
+      "id": 102,
       "customerName": "Мария Смирнова",
       "status": "paid",
       "updatedAt": "2025-10-11T09:45:00Z",
@@ -149,7 +148,7 @@
       "total": 1250
     },
     {
-      "id": "103",
+      "id": 103,
       "customerName": "Алексей Кузнецов",
       "status": "shipped",
       "updatedAt": "2025-10-11T17:10:00Z",
@@ -184,7 +183,7 @@
       "total": 900
     },
     {
-      "id": "104",
+      "id": 104,
       "customerName": "Ольга Иванова",
       "status": "cancelled",
       "updatedAt": "2025-10-12T10:30:00Z",
@@ -206,7 +205,7 @@
       "total": 150
     },
     {
-      "id": "105",
+      "id": 105,
       "customerName": "Павел Волков",
       "status": "paid",
       "updatedAt": "2025-10-12T16:00:00Z",
@@ -241,7 +240,7 @@
       "total": 900
     },
     {
-      "id": "106",
+      "id": 106,
       "customerName": "Екатерина Орлова",
       "status": "shipped",
       "updatedAt": "2025-10-13T08:30:00Z",
@@ -263,7 +262,7 @@
       "total": 800
     },
     {
-      "id": "107",
+      "id": 107,
       "customerName": "Николай Громов",
       "status": "new",
       "updatedAt": "2025-10-13T09:45:00Z",
@@ -285,7 +284,7 @@
       "total": 1200
     },
     {
-      "id": "108",
+      "id": 108,
       "customerName": "Татьяна Лебедева",
       "status": "cancelled",
       "updatedAt": "2025-10-13T11:20:00Z",
@@ -307,7 +306,7 @@
       "total": 100
     },
     {
-      "id": "109",
+      "id": 109,
       "customerName": "Михаил Андреев",
       "status": "paid",
       "updatedAt": "2025-10-13T12:00:00Z",

@@ -50,6 +50,7 @@ export class OrdersListComponent {
   public service = inject(ProductService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  totalCount = signal(100);
 
   readonly statuses = STATUSES;
 
@@ -104,6 +105,7 @@ export class OrdersListComponent {
   }
 
   onPageChange(e: PageEvent) {
+    console.log('Paginator event:', e);
     this.service.setFilter({ page: e.pageIndex + 1, pageSize: e.pageSize });
   }
 

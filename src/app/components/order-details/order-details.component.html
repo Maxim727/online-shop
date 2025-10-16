@@ -7,7 +7,7 @@
     <mat-form-field appearance="fill" class="field">
       <mat-label>{{ 'order.client' | translate }}</mat-label>
       <input matInput formControlName="customerName" />
-      <mat-error *ngIf="orderForm()?.get('customerName')?.hasError('required')">
+      <mat-error *ngIf="orderForm()?.get('customerName')?.hasError('required') && orderForm()?.touched">
         {{ 'order.clientRequired' | translate }}
       </mat-error>
     </mat-form-field>
@@ -16,12 +16,15 @@
     <mat-form-field appearance="fill" class="field">
       <mat-label>{{ 'order.status' | translate }}</mat-label>
       <mat-select formControlName="status">
-        @for (s of statuses; track s) {
+        @for (s of statuses; track s.value) {
         <mat-option [value]="s.value">
           {{ ('order.statusValues.' + s.value) | translate }}
         </mat-option>
         }
       </mat-select>
+      <mat-error *ngIf="orderForm()?.get('status')?.hasError('required') && orderForm()?.touched">
+        {{ 'order.statusRequired' | translate }}
+      </mat-error>
     </mat-form-field>
 
     <!-- Items -->
@@ -33,35 +36,46 @@
         <!-- Product Item Select -->
         <mat-form-field appearance="fill" class="product-field">
           <mat-label>{{ 'order.product' | translate }}</mat-label>
-          <mat-select formControlName="productItem" (selectionChange)="onProductChange($event.value, i)">
-            @for (product of products(); track product) {
-            <mat-option [value]="product.title">
+          <mat-select formControlName="productItem" (selectionChange)="onProductChange($event.value, i)"
+            [compareWith]="compareProducts">
+            @for (product of products(); track product.id) {
+            <mat-option [value]="product">
               {{ product.title }}
             </mat-option>
             }
           </mat-select>
+          <mat-error *ngIf="itemGroup.get('productItem')?.hasError('required') && itemGroup.touched">
+            {{ 'order.required' | translate }}
+          </mat-error>
         </mat-form-field>
 
         <!-- Quantity -->
         <mat-form-field appearance="fill" class="qty-field">
           <mat-label>{{ 'order.quantity' | translate }}</mat-label>
           <input matInput type="number" formControlName="qty" />
+          <mat-error *ngIf="itemGroup.get('qty')?.hasError('required') && itemGroup.touched">
+            {{ 'order.required' | translate }}
+          </mat-error>
+          <mat-error *ngIf="itemGroup.get('qty')?.hasError('min') && itemGroup.touched">
+            {{ 'order.quantityMin' | translate }}
+          </mat-error>
         </mat-form-field>
 
         <!-- Price -->
         <mat-form-field appearance="fill" class="price-field">
           <mat-label>{{ 'order.price' | translate }}</mat-label>
           <input matInput type="number" formControlName="price" />
+          <mat-error *ngIf="itemGroup.get('price')?.hasError('required') && itemGroup.touched">
+            {{ 'order.required' | translate }}
+          </mat-error>
+          <mat-error *ngIf="itemGroup.get('price')?.hasError('min') && itemGroup.touched">
+            {{ 'order.priceMin' | translate }}
+          </mat-error>
         </mat-form-field>
 
         <!-- Remove Button -->
         <button mat-stroked-button color="warn" type="button" (click)="removeItem(i)">
           {{ 'order.actions.remove' | translate }}
-        </button>
-
-        <!-- Placeholder Action -->
-        <button mat-stroked-button color="primary" type="button">
-          {{ 'order.actions.basic' | translate }}
         </button>
       </div>
       }
@@ -92,6 +106,5 @@
   </form>
 </mat-card>
 } @else {
-<mat-progress-spinner mode="indeterminate" diameter="60">
-</mat-progress-spinner>
+<mat-progress-spinner mode="indeterminate" diameter="60"></mat-progress-spinner>
 }
